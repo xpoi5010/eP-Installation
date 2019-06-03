@@ -74,8 +74,6 @@
     <Compile Include="InstallInfo\MainInstall.cs" />
     <Compile Include="InstallTool\InstallTool.cs" />
     <Compile Include="IO\AssemblyResource.cs" />
-    <Compile Include="IO\ePInstallPackage\InstallFile.cs" />
-    <Compile Include="IO\ePInstallPackage\InstallPackage.cs" />
     <Compile Include="IO\IProtocol.cs" />
     <Compile Include="IO\Path.cs" />
     <Compile Include="IO\PathCreater.cs" />

@@ -115,8 +115,50 @@ namespace eP_Installer.IO.ePInstallPackage
         public void SaveFile(string Path)
         {
             FileStream fs = new FileStream(Path, FileMode.Create);
-
+            BinaryWriter bw = new BinaryWriter(fs);
+            bw.Write(Header);
+            bw.Write(new byte[64]);
+            bw.Write(this.Count);
+            foreach(InstallFile f in this)
+            {
+                string[] split = OriginalFilePath.Spliter(f.OriginalFileLocation);
+                bw.Write(f.TargerLocation.Length);
+                bw.Write(Encoding.UTF8.GetBytes(f.TargerLocation));
+                if(split[0] == "this")
+                {
+                    long[] spli = OriginalFilePath.SplitThis(split[1]);
+                    long offsett = spli[0];
+                    long size = spli[1];
+                    bw.Write(size);
+                    BaseFileStream.Seek(offsett, SeekOrigin.Begin);
+                    if (BaseFileStream == null)
+                        throw new Exception("Unknown Path");
+                    for (long i = size; i > 0; i -= 262144)
+                    {
+                        long rs = i >= 262144 ? 262144 : i;
+                        byte[] readBytes = new byte[rs];
+                        BaseFileStream.Read(readBytes, 0, readBytes.Length);
+                        bw.Write(readBytes);
+                    }
+                }
+                else if(split[0] == "file")
+                {
+                    using(FileStream ts = new FileStream(split[1], FileMode.Open))
+                    {
+                        bw.Write(ts.Length);
+                        for (long i = ts.Length; i > 0; i -= 262144)
+                        {
+                            long rs = i >= 262144 ? 262144 : i;
+                            byte[] readBytes = new byte[rs];
+                            ts.Read(readBytes, 0, readBytes.Length);
+                            bw.Write(readBytes);
+                        }
+                    }
+                }
+            }
+            BaseFileStream = fs;
         }
+
     }
 
     public class FileCollectionEnumerator : IEnumerator<InstallFile>

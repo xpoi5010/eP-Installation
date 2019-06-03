@@ -44,6 +44,7 @@
     <Compile Include="InstallCommand.cs" />
     <Compile Include="IO\ePInstallPackage\InstallFile.cs" />
     <Compile Include="IO\ePInstallPackage\InstallPackage.cs" />
+    <Compile Include="IO\ePInstallPackage\OriginalFilePath.cs" />
     <Compile Include="IO\Path.cs" />
     <Compile Include="IO\PathCreater.cs" />
     <Compile Include="IO\PathVarious.cs" />
